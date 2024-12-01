@@ -80,6 +80,14 @@ func findPuzzles(puzzles []puzzle, day int) (p1, p2 *puzzle) {
 	return
 }
 
+func findLastPuzzle(puzzles []puzzle, day int) *puzzle {
+	p1, p2 := findPuzzles(puzzles, day)
+	if p2 != nil {
+		return p2
+	}
+	return p1
+}
+
 func askForDay(puzzles []puzzle, last int) (p1, p2 *puzzle) {
 	var day int
 	var input string

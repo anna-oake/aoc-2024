@@ -8,7 +8,12 @@ import (
 
 func main() {
 	puzzles, last := loadPuzzles()
-	p := ask(puzzles, last)
+	var p *puzzle
+	if os.Getenv("DONT_ASK") == "1" {
+		p = findLastPuzzle(puzzles, last)
+	} else {
+		p = ask(puzzles, last)
+	}
 	fmt.Printf("Launching Day %d Part %d\n---\n", p.Day, p.Part)
 
 	input, err := os.ReadFile(fmt.Sprintf("data/d%d.txt", p.Day))
