@@ -13,6 +13,9 @@ func (*methods) D1P1(input string) string {
 	var left, right []int64
 	for _, line := range lines {
 		sides := strings.Split(line, "   ")
+		if len(sides) != 2 {
+			continue
+		}
 		l, _ := strconv.ParseInt(sides[0], 10, 64)
 		r, _ := strconv.ParseInt(sides[1], 10, 64)
 		left = append(left, l)
@@ -34,6 +37,9 @@ func (*methods) D1P2(input string) string {
 	var left, right []int64
 	for _, line := range lines {
 		sides := strings.Split(line, "   ")
+		if len(sides) != 2 {
+			continue
+		}
 		l, _ := strconv.ParseInt(sides[0], 10, 64)
 		r, _ := strconv.ParseInt(sides[1], 10, 64)
 		left = append(left, l)
