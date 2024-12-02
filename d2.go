@@ -29,7 +29,7 @@ func d2isReportSafe(levels []string) bool {
 func d2isReportSafeDampened(levels []string, idx int) bool {
 	// yeah i know this is horrible but i literally woke up 10 minutes ago
 	// and my adhd meds havent kicked in yet and i dont wanna think
-	// i just want THE STAR
+	// i just want THE GOLD STAR (or better the kolibri)
 	if idx == len(levels) {
 		return false
 	}
