@@ -5,14 +5,14 @@ import (
 	"strings"
 )
 
-var d10memo = make(map[int][]coords)
+var d10memo = make(map[int64][]coords)
 
-func d10idx(area [][]int, x, y, dir int) int {
-	width := len(area[0])
+func d10idx(area [][]int, x, y, dir int64) int64 {
+	width := int64(len(area[0]))
 	return y*width*4 + x*4 + dir
 }
 
-func d10hike(area [][]int, x, y, dir int) []coords {
+func d10hike(area [][]int, x, y, dir int64) []coords {
 	idx := d10idx(area, x, y, dir)
 	memo, ok := d10memo[idx]
 	if ok {
@@ -29,7 +29,7 @@ func d10hike(area [][]int, x, y, dir int) []coords {
 	case 3:
 		x--
 	}
-	if x < 0 || y < 0 || x >= len(area[0]) || y >= len(area) {
+	if x < 0 || y < 0 || x >= int64(len(area[0])) || y >= int64(len(area)) {
 		d10memo[idx] = nil
 		return nil
 	}
@@ -45,7 +45,7 @@ func d10hike(area [][]int, x, y, dir int) []coords {
 	}
 	var res []coords
 	for i := 0; i < 4; i++ {
-		res = append(res, d10hike(area, x, y, i)...)
+		res = append(res, d10hike(area, x, y, int64(i))...)
 	}
 	d10memo[idx] = res
 	return res
@@ -63,7 +63,7 @@ func (*methods) D10P1(input string) string {
 			num, _ := strconv.Atoi(string(spot))
 			row = append(row, num)
 			if num == 0 {
-				starts = append(starts, coords{x: x, y: y})
+				starts = append(starts, coords{x: int64(x), y: int64(y)})
 			}
 		}
 		area = append(area, row)
@@ -71,9 +71,9 @@ func (*methods) D10P1(input string) string {
 
 	var c int
 	for _, start := range starts {
-		m := make(map[int]bool)
+		m := make(map[int64]bool)
 		for dir := 0; dir < 4; dir++ {
-			res := d10hike(area, start.x, start.y, dir)
+			res := d10hike(area, start.x, start.y, int64(dir))
 			for _, end := range res {
 				m[d10idx(area, end.x, end.y, 0)] = true
 			}
@@ -95,7 +95,7 @@ func (*methods) D10P2(input string) string {
 			num, _ := strconv.Atoi(string(spot))
 			row = append(row, num)
 			if num == 0 {
-				starts = append(starts, coords{x: x, y: y})
+				starts = append(starts, coords{x: int64(x), y: int64(y)})
 			}
 		}
 		area = append(area, row)
@@ -104,7 +104,7 @@ func (*methods) D10P2(input string) string {
 	var c int
 	for _, start := range starts {
 		for dir := 0; dir < 4; dir++ {
-			c += len(d10hike(area, start.x, start.y, dir))
+			c += len(d10hike(area, start.x, start.y, int64(dir)))
 		}
 	}
 	return strconv.Itoa(c)

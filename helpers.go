@@ -1,5 +1,5 @@
 package main
 
 type coords struct {
-	x, y int
+	x, y int64
 }

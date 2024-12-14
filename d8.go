@@ -13,7 +13,7 @@ func (a1 coords) findAntinodes(a2 coords) []coords {
 	return []coords{an1, an2}
 }
 
-func (a1 coords) findAllAntinodes(a2 coords, width, height int) (antinodes []coords) {
+func (a1 coords) findAllAntinodes(a2 coords, width, height int64) (antinodes []coords) {
 	dx := a1.x - a2.x
 	dy := a1.y - a2.y
 	for {
@@ -49,19 +49,19 @@ func (a1 coords) findAllAntinodes(a2 coords, width, height int) (antinodes []coo
 
 func (*methods) D8P1(input string) string {
 	area := make(map[byte][]coords)
-	antinodes := make(map[int]coords)
+	antinodes := make(map[int64]coords)
 
 	lines := strings.Split(input, "\n")
 	for y, line := range lines {
 		for x, spot := range line {
 			if isAlphaNumeric(spot) {
-				area[byte(spot)] = append(area[byte(spot)], coords{x: x, y: y})
+				area[byte(spot)] = append(area[byte(spot)], coords{x: int64(x), y: int64(y)})
 			}
 		}
 	}
 
-	width := len(lines[0])
-	height := len(lines)
+	width := int64(len(lines[0]))
+	height := int64(len(lines))
 
 	for _, antennas := range area {
 		for i, a1 := range antennas {
@@ -83,25 +83,25 @@ func (*methods) D8P1(input string) string {
 
 func (*methods) D8P2(input string) string {
 	area := make(map[byte][]coords)
-	antinodes := make(map[int]coords)
+	antinodes := make(map[int64]coords)
 
 	lines := strings.Split(input, "\n")
 	for y, line := range lines {
 		for x, spot := range line {
 			if isAlphaNumeric(spot) {
-				area[byte(spot)] = append(area[byte(spot)], coords{x: x, y: y})
+				area[byte(spot)] = append(area[byte(spot)], coords{x: int64(x), y: int64(y)})
 			}
 		}
 	}
 
-	width := len(lines[0])
-	height := len(lines)
+	width := int64(len(lines[0]))
+	height := int64(len(lines))
 
 	for _, antennas := range area {
 		for i, a1 := range antennas {
 			for j := i + 1; j < len(antennas); j++ {
 				a2 := antennas[j]
-				res := a1.findAllAntinodes(a2, width, height)
+				res := a1.findAllAntinodes(a2, int64(width), int64(height))
 				for _, c := range res {
 					antinodes[c.y*width+c.x] = c
 				}
