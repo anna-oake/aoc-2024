@@ -13,7 +13,6 @@ type d16grid struct {
 	area  [][]bool
 	score int64
 	cache map[int64]int64
-	m     *sync.Mutex
 	seats map[int64][]coords
 }
 
@@ -40,14 +39,12 @@ func (g *d16grid) walk(now coords, dir int, score int64, path []coords) {
 	path = append(path, now)
 	g.cache[g.getIdx(now, dir)] = score
 	if now.x == g.end.x && now.y == g.end.y {
-		g.m.Lock()
 		if score <= g.score {
 			g.score = score
 			seats := g.seats[score]
 			seats = append(seats, path...)
 			g.seats[score] = seats
 		}
-		g.m.Unlock()
 		return
 	}
 	for i := 0; i < 4; i++ {
