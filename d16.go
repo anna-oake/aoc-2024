@@ -4,7 +4,6 @@ import (
 	"math"
 	"strconv"
 	"strings"
-	"sync"
 )
 
 type d16grid struct {
@@ -97,7 +96,6 @@ func (*methods) D16P1(input string) string {
 		end:   end,
 		area:  area,
 		score: int64(math.MaxInt64),
-		m:     &sync.Mutex{},
 		cache: make(map[int64]int64),
 		seats: make(map[int64][]coords),
 	}
@@ -136,7 +134,6 @@ func (*methods) D16P2(input string) string {
 		end:   end,
 		area:  area,
 		score: int64(math.MaxInt64),
-		m:     &sync.Mutex{},
 		cache: make(map[int64]int64),
 		seats: make(map[int64][]coords),
 	}

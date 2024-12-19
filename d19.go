@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"strconv"
 	"strings"
 )
@@ -34,8 +33,21 @@ func (*methods) D19P1(input string) string {
 	designs := strings.Split(parts[1], "\n")
 
 	var possible int64
-	for i, d := range designs {
-		fmt.Printf("%d/%d\n", i+1, len(designs))
+	for _, d := range designs {
+		if d19try(towels, d) > 0 {
+			possible++
+		}
+	}
+	return strconv.FormatInt(possible, 10)
+}
+
+func (*methods) D19P2(input string) string {
+	parts := strings.Split(input, "\n\n")
+	towels := strings.Split(parts[0], ",")
+	designs := strings.Split(parts[1], "\n")
+
+	var possible int64
+	for _, d := range designs {
 		possible += d19try(towels, d)
 	}
 	return strconv.FormatInt(possible, 10)
