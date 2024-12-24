@@ -168,18 +168,6 @@ func (*methods) D24P2(input string) string {
 	xn, _ := strconv.ParseInt(string(x), 2, 64)
 	yn, _ := strconv.ParseInt(string(y), 2, 64)
 	ezn := xn + yn // expected Z number
-	ezs := strconv.FormatInt(ezn, 2)
-	var ez []bool
-	for _, z := range ezs {
-		if z == '1' {
-			ez = append(ez, true)
-		} else {
-			ez = append(ez, false)
-		}
-	}
-	for i, j := 0, len(x)-1; i < j; i, j = i+1, j-1 {
-		ez[i], ez[j] = ez[j], ez[i]
-	}
 
 	d := initd24(input)
 
