@@ -7,12 +7,10 @@ import (
 )
 
 type d17puter struct {
-	a, b, c  int64
-	program  []int
-	ip       int64
-	out      []int64
-	quine    bool
-	quineCnt int
+	a, b, c int64
+	program []int
+	ip      int64
+	out     []int64
 }
 
 func (p *d17puter) load(input []string) {
@@ -39,8 +37,6 @@ func (p *d17puter) load(input []string) {
 			p.c = n
 		}
 	}
-	p.quine = true
-	p.quineCnt = 0
 }
 
 func (p *d17puter) combo(val int64) int64 {
@@ -60,9 +56,6 @@ func (p *d17puter) combo(val int64) int64 {
 
 func (p *d17puter) cycle() bool {
 	if p.ip >= int64(len(p.program)) || p.ip+1 >= int64(len(p.program)) {
-		if p.quineCnt < len(p.program) {
-			p.quine = false
-		}
 		return false
 	}
 	op := int64(p.program[p.ip])
@@ -88,11 +81,6 @@ func (p *d17puter) cycle() bool {
 	case 5: // out
 		val = p.combo(val)
 		p.out = append(p.out, val%8)
-		if p.quine && len(p.out) <= len(p.program) && p.out[len(p.out)-1] == int64(p.program[len(p.out)-1]) {
-			p.quineCnt++
-		} else {
-			p.quine = false
-		}
 	case 6: // bdv
 		val = p.combo(val)
 		p.b = int64(float64(p.a) / math.Pow(2, float64(val)))
@@ -106,12 +94,9 @@ func (p *d17puter) cycle() bool {
 	return true
 }
 
-func (p *d17puter) run(quine bool) bool {
+func (p *d17puter) run() bool {
 	for {
 		running := p.cycle()
-		if quine && !p.quine {
-			return false
-		}
 		if !running {
 			return true
 		}
@@ -123,9 +108,7 @@ func (p *d17puter) reset() {
 	p.b = 0
 	p.c = 0
 	p.ip = 0
-	p.quine = true
 	p.out = nil
-	p.quineCnt = 0
 }
 
 func (p *d17puter) printOutput() string {
@@ -144,9 +127,42 @@ func (*methods) D17P1(input string) string {
 
 	p := &d17puter{}
 	p.load(lines)
-	p.run(false)
+	p.run()
 
 	return p.printOutput()
 }
 
-//TODO: D17P2
+// 000 - 7
+// 001 - 6
+// 010 - 4
+// 011 - 7
+// 100 - 3
+// 101 - 2
+// 110 - 1
+// 111 - 0
+func (*methods) D17P2(input string) string {
+	lines := strings.Split(strings.TrimSpace(input), "\n")
+	if len(lines) != 5 {
+		return "invalid input (unexpected amount of lines)"
+	}
+
+	p := &d17puter{}
+	p.load(lines)
+
+	a := int64(0b111) // this produces 0 in the end
+	for i := len(p.program) - 2; i >= 0; i-- {
+		a <<= 3
+		d := p.program[i]
+		for j := 0; j < 8; j++ {
+			p.reset()
+			p.a = a + int64(j)
+			p.run()
+			if int64(d) == p.out[0] {
+				a += int64(j)
+				break
+			}
+		}
+	}
+
+	return strconv.FormatInt(a, 10)
+}
